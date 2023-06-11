@@ -1,13 +1,14 @@
 {
   "compilerOptions": {
+    "target": "ESNext",
     "module": "commonjs",
     "esModuleInterop": true,
-    "target": "es6",
     "moduleResolution": "node",
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": "./",
     "strict": true, /* Enable all strict type-checking options. */
+    "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */
   },
   "lib": ["es2015"]
