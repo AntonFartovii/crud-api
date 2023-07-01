@@ -7,7 +7,8 @@ export class App {
 
   constructor() {
     this._router = new Router();
-    this._server = http.createServer(this._router.handleRequest);
+    this._server = http.createServer();
+    this._server.on('request', this._router.handleRequest);
   }
 
   public listen(port: number, cb?: () => void): void {
@@ -16,6 +17,18 @@ export class App {
 
   public get(path: string, cb: http.RequestListener): void {
     this._router.get(path, cb);
+  }
+
+  public post(path: string, cb: http.RequestListener): void {
+    this._router.post(path, cb);
+  }
+
+  public delete(path: string, cb: http.RequestListener): void {
+    this._router.delete(path, cb);
+  }
+
+  public update(path: string, cb: http.RequestListener): void {
+    this._router.update(path, cb);
   }
 
   private res404(req: http.IncomingMessage, res: http.ServerResponse): void {
