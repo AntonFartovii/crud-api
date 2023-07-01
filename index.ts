@@ -12,7 +12,7 @@ import {
   getUsers,
   updateUser,
 } from './src/controllers/user.controller';
-
+const isMulti = process.argv.includes('--multi');
 const countCPUs: number = cpus().length;
 const PORT: number = Number(process.env.PORT);
 const app: any = new App();
@@ -23,7 +23,7 @@ app.get('/users/${userId}', getUser);
 app.delete('/users/${userId}', deleteUser);
 app.update('/users/${userId}', updateUser);
 
-if (cluster.isPrimary) {
+if (cluster.isPrimary && isMulti) {
   process.stdout.write(`Primary ${process.pid} is running\n`);
 
   for (let i: number = 0; i < countCPUs; i++) {

@@ -5,7 +5,9 @@
   "scripts": {
     "build": "tsc",
     "start:prod": "tsc && node ./dist/index.js",
-    "start:dev": "nodemon --exec ts-node index.ts"
+    "start:dev": "nodemon --exec ts-node index.ts",
+    "start:dev:multi": "npx nodemon --exec ts-node index.ts --multi",
+    "start:multi": "npx cross-env NODE_ENV=production tsc --declaration && node ./build/index.js --multi"
   },
   "keywords": [],
   "author": "",
