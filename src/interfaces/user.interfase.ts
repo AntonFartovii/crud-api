@@ -10,3 +10,9 @@ export interface User {
   age: string;
   hobbies: string[];
 }
+
+export interface CreateUserDto {
+  username: string;
+  age: string;
+  hobbies: string[];
+}

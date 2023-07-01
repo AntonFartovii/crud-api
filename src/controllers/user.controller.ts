@@ -1,13 +1,12 @@
 import { getPostData } from '../utils/utils';
 const User = require('../services/user.service');
-import { uuidValidateV4 } from '../utils/validate';
+import { uuidValidateV4, uuidValidateV4_test } from '../utils/validate';
 import { HandlerOptions } from '../Router';
 import { IncomingMessage, ServerResponse } from 'http';
 
-async function getUsers(req: IncomingMessage, res: ServerResponse) {
+async function getUsers(req: IncomingMessage, res: ServerResponse): Promise<void> {
   try {
     const users = await User.findAll();
-
     res.writeHead(200, { 'Content-type': 'application/json' });
     res.end(JSON.stringify(users));
   } catch (err) {
@@ -22,13 +21,7 @@ async function getUser(
 ): Promise<void> {
   const { userId } = params;
   try {
-    const valid: boolean = uuidValidateV4(userId);
-
-    if (!valid) {
-      res.writeHead(400, { 'Content-type': 'application/json' });
-      res.end(JSON.stringify({ message: '400 - ID is not valid ' }));
-    }
-
+    uuidValidateV4_test(req, res, userId);
     const user: any = await User.findById(userId);
 
     if (!user) {
@@ -71,12 +64,7 @@ async function updateUser(
 ): Promise<void> {
   const { userId } = params;
   try {
-    const valid: boolean = uuidValidateV4(userId);
-
-    if (!valid) {
-      res.writeHead(400, { 'Content-type': 'application/json' });
-      res.end(JSON.stringify({ message: '400 - ID is not valid ' }));
-    }
+    uuidValidateV4_test(req, res, userId);
 
     const user: any = await User.findById(userId);
 
@@ -107,12 +95,7 @@ async function deleteUser(
   { params }: HandlerOptions
 ): Promise<void> {
   const { userId } = params;
-  const valid: boolean = uuidValidateV4(userId);
-
-  if (!valid) {
-    res.writeHead(400, { 'Content-type': 'application/json' });
-    res.end(JSON.stringify({ message: '400 - ID is not valid ' }));
-  }
+  uuidValidateV4_test(req, res, userId);
 
   const user = await User.findById(userId);
   try {

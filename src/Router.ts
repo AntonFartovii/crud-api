@@ -82,7 +82,7 @@ export class Router {
       routes[method!][matchedRoute](req, res, { params: { ...pathParams } });
     } else {
       res.writeHead(404, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ error: 'Error' }));
+      res.end(JSON.stringify({ error: 'This endpoint does not exist!' }));
     }
   }
 }

@@ -1,12 +1,11 @@
 {
-  "name": "crud-api-q4",
-  "version": "1.0.0",
+  "name": "crud-api",
+  "version": "1.2.0",
   "description": "",
   "scripts": {
     "build": "tsc",
     "start:prod": "tsc && node ./dist/index.js",
-    "start:dev": "nodemon --exec ts-node index.ts",
-    "start": "webpack serve --open --config ./webpack.config.js --env mode=dev"
+    "start:dev": "nodemon --exec ts-node index.ts"
   },
   "keywords": [],
   "author": "",

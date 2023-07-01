@@ -30,10 +30,4 @@ export class App {
   public update(path: string, cb: http.RequestListener): void {
     this._router.update(path, cb);
   }
-
-  private res404(req: http.IncomingMessage, res: http.ServerResponse): void {
-    res.writeHead(404, { 'Content-Type': 'text/plain' });
-    res.write('Not Found');
-    res.end();
-  }
 }

@@ -21,7 +21,7 @@ app.get('/users', getUsers);
 app.post('/users', createUser);
 app.get('/users/${userId}', getUser);
 app.delete('/users/${userId}', deleteUser);
-app.update('/services/${userId}', updateUser);
+app.update('/users/${userId}', updateUser);
 
 if (cluster.isPrimary) {
   process.stdout.write(`Primary ${process.pid} is running\n`);
