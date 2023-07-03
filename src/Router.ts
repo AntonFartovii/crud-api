@@ -1,6 +1,5 @@
 import http from 'http';
 
-type RequestListener = (req: http.IncomingMessage, res: http.ServerResponse) => void;
 import { IncomingMessage, ServerResponse } from 'http';
 
 export enum METHODS {
@@ -14,15 +13,11 @@ export interface HandlerOptions {
   [key: string]: any;
 }
 
-export type RequestListenerWithOptions = (
-  req: IncomingMessage,
-  res: ServerResponse,
-  options: HandlerOptions
-) => void;
+export type Callback = (req: IncomingMessage, res: ServerResponse, options: HandlerOptions) => void;
 
 export interface Routes {
   [method: string]: {
-    [path: string]: RequestListenerWithOptions;
+    [path: string]: Callback;
   };
 }
 const routes: Routes = {
@@ -34,47 +29,42 @@ const routes: Routes = {
 
 export class Router {
   constructor() {}
-  private addRoute = (method: METHODS, path: string, cb: RequestListenerWithOptions): void => {
-    const routeParamRegExp = /(?<param>(?<=\$\{|\{)\S+(?=\}))/;
-    const parsedRouteChunks = path.split('/').reduce((acc: string[], chunk) => {
-      const match = chunk.match(routeParamRegExp);
+  private addRoute = (method: METHODS, path: string, cb: Callback): void => {
+    const chunks = path.split('/').reduce((acc: string[], chunk) => {
+      const match = chunk.match(/(?<param>(?<=\$\{|\{)\S+(?=\}))/);
       const paramName = match?.groups?.param;
       acc.push(paramName ? `(?<${paramName}>\\S+)` : chunk);
       return acc;
     }, []);
-    const pathString = `^${parsedRouteChunks.join('/')}\\/?$`;
+    const pathString = `^${chunks.join('/')}\\/?$`;
     routes[method][pathString] = cb;
   };
 
-  public get(path: string, cb: RequestListenerWithOptions): void {
+  public get(path: string, cb: Callback): void {
     this.addRoute(METHODS.GET, path, cb);
   }
 
-  public post(path: string, cb: RequestListenerWithOptions): void {
+  public post(path: string, cb: Callback): void {
     this.addRoute(METHODS.POST, path, cb);
   }
 
-  public delete(path: string, cb: RequestListenerWithOptions): void {
+  public delete(path: string, cb: Callback): void {
     this.addRoute(METHODS.DELETE, path, cb);
   }
 
-  public update(path: string, cb: RequestListenerWithOptions): void {
+  public update(path: string, cb: Callback): void {
     this.addRoute(METHODS.PUT, path, cb);
   }
 
   public handleRequest(req: http.IncomingMessage, res: http.ServerResponse) {
     const { url, method } = req;
 
-    console.log(url);
-    console.log(method);
-    // console.log('this.routes: ', routes);
+    console.log(method, ' ', url);
 
     const matchedRoute = Object.keys(routes[method!]).find((pathString) => {
       const routeRegExp = new RegExp(pathString);
       return routeRegExp.test(url!);
     });
-
-    console.log(matchedRoute);
 
     if (matchedRoute) {
       const pathParams = url!.match(new RegExp(matchedRoute))?.groups;

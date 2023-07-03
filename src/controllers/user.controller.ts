@@ -3,6 +3,7 @@ const User = require('../services/user.service');
 import { uuidValidateV4, uuidValidateV4_test } from '../utils/validate';
 import { HandlerOptions } from '../Router';
 import { IncomingMessage, ServerResponse } from 'http';
+import { User } from '../interfaces/user.interfase';
 
 async function getUsers(req: IncomingMessage, res: ServerResponse): Promise<void> {
   try {
@@ -48,7 +49,7 @@ async function createUser(req: IncomingMessage, res: ServerResponse) {
     }
 
     const user = { name, age, hobbies };
-    const newUser: any = await User.create(user);
+    const newUser: User = await User.create(user);
 
     res.writeHead(201, { 'Content-type': 'application/json' });
     return res.end(JSON.stringify(newUser));
